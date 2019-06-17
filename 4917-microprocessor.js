@@ -134,5 +134,12 @@ const loadProgram = program => {
   fetchExecute(memory);
 };
 
-// sample program to print the numbers 0 through 15 (and then beep!)
-loadProgram([8, 0, 3, 11, 1, 15, 0, 7]);
+function start() {
+  const runBtn = document.getElementById("run");
+  runBtn.addEventListener("click", () => {
+    // sample program to print the numbers 0 through 15 (and then beep!)
+    loadProgram([8, 0, 3, 11, 1, 15, 0, 7]);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", start);
