@@ -1,0 +1,140 @@
+<html>
+  <head>
+    <title>4917 Microprocessor Simulator</title>
+    <script src="./4917-microprocessor.js"></script>
+  </head>
+  <body>
+    <style>
+      :root {
+        font-size: 16px;
+        font-family: Courier, monospace;
+      }
+      div {
+        padding: 16px;
+      }
+      div#userInput input {
+        font-size: 1rem;
+      }
+      div#userInput button {
+        font-size: 1rem;
+      }
+      #programVisualizer .cell {
+        flex: 1;
+        min-width: 40px;
+        border: 1px solid black;
+        border-radius: 2%;
+        font-size: 1.2rem;
+        text-align: center;
+      }
+      #programVisualizer .cell-active {
+        background-color: black;
+        color: white;
+      }
+      #programVisualizer .cell-active-arg {
+        background-color: thistle;
+      }
+    </style>
+    <h1>4917 Microprocessor Simulator</h1>
+    <div>
+      Click RUN (or enter your own program first).<br />
+      The sample program prints the number between 0 and 15 and ends with a
+      beep.
+    </div>
+    <div id="userInput">
+      <input type="text" id="program" value="8 0 3 11 1 15 0 7" />
+      <input type="number" id="msDelay" placeholder="ms delay (500)" />
+      <button id="run">RUN</button>
+    </div>
+    <div>
+      <h3>Program State</h3>
+      <div
+        id="programVisualizer"
+        style="
+    display: flex;
+    padding: 36px;
+    flex-flow: row wrap;
+    border: 1px solid black;
+    width: 50%;
+    "
+      ></div>
+    </div>
+    <div>
+      <h3>Output</h3>
+      <div
+        id="output"
+        style="
+    display: flex;
+    padding: 36px;
+    flex-flow: row wrap;
+    border: 1px solid black;
+    width: 50%;"
+      ></div>
+    </div>
+    <div>
+      <h3 style="display: inline;">Registers</h3>
+      <div style="display: flex; align-items: center;">
+        R0:
+        <div id="R0"></div>
+        R1:
+        <div id="R1"></div>
+        IP:
+        <div id="IP"></div>
+        IS:
+        <div id="IS"></div>
+      </div>
+    </div>
+    <div>
+      <h3>More Information</h3>
+      <p>
+        4 bits of memory per cell, 16 cells of memory<br />
+        Two registers: R0, R1<br />
+        (all initialized to 0 at startup)
+      </p>
+
+      <p>IP (instruction pointer) & IS (instruction store)</p>
+
+      <pre>
+OPCODES
+
+1-byte Instructions
+0 = Halt
+1 = Add (R0 = R0 + R1)
+2 = Subtract (R0 = R0 – R1)
+3 = Increment R0 (R0 = R0 + 1)
+4 = Increment R1 (R1 = R1 + 1)
+5 = Decrement R0 (R0 = R0 – 1)
+6 = Decrement R1 (R1 = R1 – 1)
+7 = Ring Bell
+
+2-byte Instructions, value of the second byte is called @data
+8 = Print @data (The numerical value of @data is printed)
+9 = Load value at address @data into R0
+10 = Load value at address @data into R1
+11 = Store R0 into address @data
+12 = Store R1 into address @data
+13 = Jump to address @data
+14 = Jump to address @data if R0 == 0
+15 = Jump to address @data if R0 != 0
+</pre
+      >
+    </div>
+    <div>
+      see:
+      <ul>
+        <li>
+          Lecture 3: Machine Code - Richard Buckland UNSW:
+          <a href="https://www.youtube.com/watch?v=gTeDX4yAdyU" target="_blank"
+            >https://www.youtube.com/watch?v=gTeDX4yAdyU</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://andrewharvey4.wordpress.com/2009/03/13/comp2121-wk01/"
+            target="_blank"
+            >https://andrewharvey4.wordpress.com/2009/03/13/comp2121-wk01/</a
+          >
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>
