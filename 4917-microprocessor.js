@@ -1,10 +1,10 @@
 /**
  * The 4917 Microprocessor
- * 
+ *
  * 4 bits of memory per cell, 16 cells of memory
  * Two registers: R0, R1
  * (all initialized to 0 at startup)
- * 
+ *
  * IP (instruction pointer) & IS (instruction store)
  *
  * OPCODES
@@ -27,7 +27,7 @@
  *   13 = Jump to address <data>
  *   14 = Jump to address <data> if R0 == 0
  *   15 = Jump to address <data> if R0 != 0
- * 
+ *
  * Lecture 3: Machine Code - Richard Buckland UNSW
  *   https://www.youtube.com/watch?v=gTeDX4yAdyU
  *   https://www.cse.unsw.edu.au/~richardb/
@@ -42,6 +42,36 @@ function beep() {
   );
   snd.play();
 }
+
+let OUTPUT_DIV,
+  PROGRAM_DIV,
+  TIMER_LOOP,
+  MAX_MEM = 16,
+  el_R0,
+  el_R1,
+  el_IP,
+  el_IS,
+  SELECTOR_LIST = [],
+  cellSelectors = [];
+
+const updateStateDisplay = ({ R0, R1, IP, IS }) => {
+  // Clear existing cells
+  document.querySelectorAll(".cell").forEach(cell => {
+    cell.classList.remove("cell-active");
+    cell.classList.remove("cell-active-arg");
+  });
+
+  el_R0.textContent = R0;
+  el_R1.textContent = R1;
+  el_IP.textContent = IP;
+  el_IS.textContent = IS;
+
+  cellSelectors[IP].classList.add("cell-active");
+  if (IS > 7 && IP < MAX_MEM - 1) {
+    // it's a two-cell instruction
+    cellSelectors[IP + 1].classList.add("cell-active-arg");
+  }
+};
 
 const fetchExecute = memory => {
   let R0 = 0,
@@ -74,7 +104,7 @@ const fetchExecute = memory => {
         beep();
         break;
       case 8:
-        console.log(arg);
+        logIt(arg);
         IP += 2;
         break;
       case 9:
@@ -116,29 +146,77 @@ const fetchExecute = memory => {
     (R0 %= 16), (R1 %= 16), (IP %= 16); // we only have 4 bits!
   };
 
-  while (IS != 0) {
+  const userSpecifiedDelay = document.getElementById("msDelay").value;
+
+  function updateLoop() {
+    if (IS === 0) {
+      clearInterval(TIMER_LOOP);
+      return false;
+    }
     IS = memory[IP];
     if (IS >> 3) {
       // two byte instruction
+      updateStateDisplay({ R0, R1, IP, IS });
       executeInstruction(IS, memory[IP + 1]);
     } else {
+      updateStateDisplay({ R0, R1, IP, IS });
       ++IP;
       executeInstruction(IS);
     }
   }
+  TIMER_LOOP = setInterval(updateLoop, userSpecifiedDelay || 500);
+};
+
+const drawMemory = memory => {
+  memory.forEach((v, idx) => {
+    let q = document.createElement("div");
+    q.innerHTML = v;
+    q.id = "cell_" + idx;
+    q.classList.add("cell");
+    if (idx === 0) {
+      q.classList.add("cell-active");
+    }
+    PROGRAM_DIV.appendChild(q);
+    cellSelectors.push(document.getElementById("cell_" + idx));
+  });
 };
 
 const loadProgram = program => {
   let memory = new Uint8Array(16);
   memory = memory.map((_, idx) => program[idx] % 16 || 0); // we only have 4 bits!
+  drawMemory(memory);
   fetchExecute(memory);
 };
 
+const clearIt = () => {
+  clearInterval(TIMER_LOOP);
+  cellSelectors = [];
+  SELECTOR_LIST.forEach(s => (s.innerHTML = null));
+};
+const logIt = arg => (OUTPUT_DIV.innerHTML += " " + arg);
+
+const initializeListeners = () => {
+  el_R0 = document.getElementById("R0");
+  el_R1 = document.getElementById("R1");
+  el_IP = document.getElementById("IP");
+  el_IS = document.getElementById("IS");
+  PROGRAM_DIV = document.getElementById("programVisualizer");
+  OUTPUT_DIV = document.getElementById("output");
+  SELECTOR_LIST = [el_R0, el_R1, el_IP, el_IS, PROGRAM_DIV, OUTPUT_DIV];
+};
+
 function start() {
+  initializeListeners();
   const runBtn = document.getElementById("run");
+
   runBtn.addEventListener("click", () => {
-    // sample program to print the numbers 0 through 15 (and then beep!)
-    loadProgram([8, 0, 3, 11, 1, 15, 0, 7]);
+    clearIt();
+    // fetch program from the input box
+    const theProgram = document
+      .getElementById("program")
+      .value.split(" ")
+      .map(i => Number(i)); // every instruction must be a number, not a string
+    loadProgram(theProgram);
   });
 }
 
