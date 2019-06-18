@@ -13,6 +13,10 @@
       div {
         padding: 16px;
       }
+      div#body_container {
+        display: flex;
+        flex-flow: row nowrap;
+      }
       div#userInput input {
         font-size: 1rem;
       }
@@ -46,55 +50,55 @@
       <input type="number" id="msDelay" placeholder="ms delay (500)" />
       <button id="run">RUN</button>
     </div>
-    <div>
-      <h3>Program State</h3>
-      <div
-        id="programVisualizer"
-        style="
+    <div id="body_container">
+      <div style="flex: 4;">
+        <div>
+          <h3>Program State</h3>
+          <div
+            id="programVisualizer"
+            style="
+    display: flex;
+    padding: 32px;
+    flex-flow: row wrap;
+    border: 1px solid black;"
+          ></div>
+        </div>
+        <div>
+          <h3>Output</h3>
+          <div
+            id="output"
+            style="
     display: flex;
     padding: 36px;
     flex-flow: row wrap;
-    border: 1px solid black;
-    width: 50%;
-    "
-      ></div>
-    </div>
-    <div>
-      <h3>Output</h3>
-      <div
-        id="output"
-        style="
-    display: flex;
-    padding: 36px;
-    flex-flow: row wrap;
-    border: 1px solid black;
-    width: 50%;"
-      ></div>
-    </div>
-    <div>
-      <h3 style="display: inline;">Registers</h3>
-      <div style="display: flex; align-items: center;">
-        R0:
-        <div id="R0"></div>
-        R1:
-        <div id="R1"></div>
-        IP:
-        <div id="IP"></div>
-        IS:
-        <div id="IS"></div>
+    border: 1px solid black;"
+          ></div>
+        </div>
+        <div>
+          <h3 style="display: inline;">Registers</h3>
+          <div style="display: flex; align-items: center;">
+            R0:
+            <div id="R0"></div>
+            R1:
+            <div id="R1"></div>
+            IP:
+            <div id="IP"></div>
+            IS:
+            <div id="IS"></div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div>
-      <h3>More Information</h3>
-      <p>
-        4 bits of memory per cell, 16 cells of memory<br />
-        Two registers: R0, R1<br />
-        (all initialized to 0 at startup)
-      </p>
+      <div style="flex: 1;">
+        <h3>More Information</h3>
+        <p>
+          4 bits of memory per cell, 16 cells of memory<br />
+          Two registers: R0, R1<br />
+          (all initialized to 0 at startup)
+        </p>
 
-      <p>IP (instruction pointer) & IS (instruction store)</p>
+        <p>IP (instruction pointer) & IS (instruction store)</p>
 
-      <pre>
+        <pre>
 OPCODES
 
 1-byte Instructions
@@ -117,25 +121,26 @@ OPCODES
 14 = Jump to address @data if R0 == 0
 15 = Jump to address @data if R0 != 0
 </pre
-      >
-    </div>
-    <div>
-      see:
-      <ul>
-        <li>
-          Lecture 3: Machine Code - Richard Buckland UNSW:
-          <a href="https://www.youtube.com/watch?v=gTeDX4yAdyU" target="_blank"
-            >https://www.youtube.com/watch?v=gTeDX4yAdyU</a
-          >
-        </li>
-        <li>
-          <a
-            href="https://andrewharvey4.wordpress.com/2009/03/13/comp2121-wk01/"
-            target="_blank"
-            >https://andrewharvey4.wordpress.com/2009/03/13/comp2121-wk01/</a
-          >
-        </li>
-      </ul>
+        >
+        see:
+        <ul>
+          <li>
+            Lecture 3: Machine Code - Richard Buckland UNSW:
+            <a
+              href="https://www.youtube.com/watch?v=gTeDX4yAdyU"
+              target="_blank"
+              >https://www.youtube.com/watch?v=gTeDX4yAdyU</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://andrewharvey4.wordpress.com/2009/03/13/comp2121-wk01/"
+              target="_blank"
+              >https://andrewharvey4.wordpress.com/2009/03/13/comp2121-wk01/</a
+            >
+          </li>
+        </ul>
+      </div>
     </div>
   </body>
 </html>
