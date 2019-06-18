@@ -117,10 +117,12 @@ const fetchExecute = memory => {
         break;
       case 11:
         memory[arg] = R0;
+        redrawMemoryAtIdx({idx: arg, newVal: R0});
         IP += 2;
         break;
       case 12:
         memory[arg] = R1;
+        redrawMemoryAtIdx({idx: arg, newVal: R1});
         IP += 2;
         break;
       case 13:
@@ -166,6 +168,8 @@ const fetchExecute = memory => {
   }
   TIMER_LOOP = setInterval(updateLoop, userSpecifiedDelay || 500);
 };
+
+const redrawMemoryAtIdx = ({idx, newVal}) => cellSelectors[idx].innerHTML = newVal;
 
 const drawMemory = memory => {
   memory.forEach((v, idx) => {
